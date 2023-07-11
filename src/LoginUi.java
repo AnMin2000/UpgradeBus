@@ -101,6 +101,7 @@ public class LoginUi extends JFrame{
                     String UserPw = PwTextField.getText();
 
                     boolean state = new DB().Login(UserId, UserPw);
+                    // 관리자 로그인 알고리즘 추가하기
 
                     if(state == true){
                         dispose();
