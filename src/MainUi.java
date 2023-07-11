@@ -5,8 +5,8 @@ import javax.swing.*;          // 스윙 컴포넌트 클래스들 경로명
 
 class Title extends JPanel {
     public Title() {
-        Color mycor=new Color(189,215,238);
-        setBackground(mycor);
+        Color mycolor=new Color(189,215,238);
+        setBackground(mycolor);
 
         setLayout(new FlowLayout(FlowLayout.LEFT, 15, 16));
 
@@ -109,7 +109,7 @@ class CenterPanel extends JPanel {
 
         JLabel p1 = new JLabel("예매하기");
         JLabel p2 = new JLabel("예약조회");
-        JLabel p3 = new JLabel("챗봇문의");
+        JLabel p3 = new JLabel("상담원 연결");
         p1.setFont(new Font("휴먼엑스포", Font.PLAIN, 35));
         p2.setFont(new Font("휴먼엑스포", Font.PLAIN, 35));
         p3.setFont(new Font("휴먼엑스포", Font.PLAIN, 35));
@@ -118,7 +118,7 @@ class CenterPanel extends JPanel {
         p3.setForeground(Color.WHITE);
         p1.setBounds(105,180,200,200);
         p2.setBounds(375,180,200,200);
-        p3.setBounds(645,180,200,200);
+        p3.setBounds(620,180,200,200);
         add(p1);
         add(p2);
         add(p3);
