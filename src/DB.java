@@ -8,15 +8,10 @@ public class DB {
     PreparedStatement pstmt;
     Connection conn = null;
     DB() throws ClassNotFoundException, SQLException {
-        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        String connectionUrl =
-                "jdbc:sqlserver://localhost;"
-                        + "encrypt=true;"
-                        + "instanceName=SQLEXPRESS;"
-                        + "integratedSecurity=true;"
-                        + "database=Bus;"
-                        + "trustServerCertificate=true;";
-        conn = DriverManager.getConnection(connectionUrl);
+        String dbUrl = "jdbc:mysql://localhost:3306/bus";
+        String dbID = "root";
+        String dbPassword = "0000";
+        conn = DriverManager.getConnection(dbUrl, dbID, dbPassword);
     }
     public void insert(String name, int number, String[] PrName) throws SQLException, ParseException {
         //name : 테이블 이름, number : 해당 디비 컬럼 갯수, PrName : 디비에 입력 할 값들
@@ -65,7 +60,7 @@ public class DB {
     }
     public boolean Overlap(String ID) throws SQLException {
         try {
-            String sql = "select * from dbo.client where userID = ?";
+            String sql = "select * from client where userID = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, ID);
             ResultSet rs = pstmt.executeQuery();
@@ -85,7 +80,7 @@ public class DB {
 
     public boolean Login(String Id, String Pw) throws SQLException {
         try {
-            String sql = "select * from dbo.client where userID = ? and pwd = ? ";
+            String sql = "select * from client where userID = ? and pwd = ? ";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, Id);
             pstmt.setString(2, Pw);
@@ -104,7 +99,7 @@ public class DB {
     }
     public boolean AdminLogin(String Id, String Pw) throws SQLException{
         try {
-            String sql = "select * from dbo.admin where adminID = ? and pwd = ? ";
+            String sql = "select * from admin where adminID = ? and pwd = ? ";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, Id);
             pstmt.setString(2, Pw);
@@ -120,7 +115,7 @@ public class DB {
         return false;
     }
     public boolean checkReserve(int Id) throws SQLException {
-        String sql = "select reserveID from dbo.reserve where reserveID = ? ";
+        String sql = "select reserveID from reserve where reserveID = ? ";
         pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, Id);
         ResultSet rs = pstmt.executeQuery();

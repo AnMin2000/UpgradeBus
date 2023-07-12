@@ -9,6 +9,8 @@ import java.lang.reflect.Array;
 import java.util.*;
 import java.text.*;
 import java.time.LocalDate;
+import java.util.Calendar;
+
 // 표 테이블에 들어갈 표 정보 클래스
 class Ticket {
     ArrayList<String> starttime = new ArrayList<String>();
@@ -39,21 +41,29 @@ class DuringDateTest {
         int startMonth= Integer.parseInt(startDt.substring(4,6));   // 시작 날짜에서 월만 잘라서 저장
         int startDate = Integer.parseInt(startDt.substring(6,8));   // 시작 날짜에서 일만 잘라서 저장
 
-        LocalDate startDateObj = LocalDate.of(startYear, startMonth, startDate);
-        LocalDate endDateObj = LocalDate.of(endDt / 10000, (endDt % 10000) / 100, endDt % 100);
+        Calendar cal = Calendar.getInstance();    // Calendar 객체 생성
+
+        // Calendar의 Month, Date는 0부터 시작하므로 -1 해준다.
+        // Calendar의 기본 날짜를 startDt로 세팅해준다.
+        cal.set(startYear, startMonth - 1, startDate - 1);
 
         int count = 0;    // 날짜를 배열에 저장할 때마다 증가할 count 변수
         int i = 0;
-        LocalDate currentDate = startDateObj;
-        while (!currentDate.isAfter(endDateObj)) {
-            this.date[i] = getDateByLocalDate(currentDate);   // 시작 날짜부터 시작하여 날짜를 배열에 저장
+        while(true) {
+            this.date[i] = getDateByString(cal.getTime());   // 시작 날짜부터 시작하여 날짜를 배열에 저장
 
-            currentDate = currentDate.plusDays(1); // 하루씩 증가
-
+            // Calendar의 날짜를 하루씩 증가한다.
+            cal.add(Calendar.DATE, 1); // one day increment
             i += 1;
             count += 1;   // count + 1
+
+            // 현재 날짜가 종료일자보다 크면 종료
+            if(getDateByInteger(cal.getTime()) > endDt) break;
         }
-    }
+
+        this.length = count;   // 최종 count 값을 length에 저장
+        }
+
     private static String getDateByLocalDate(LocalDate date) {
         int year = date.getYear();
         int month = date.getMonthValue();
@@ -305,6 +315,7 @@ class ReservationCenter extends JPanel {
 
         String[] start_terminal = new String[100];
         String end_terminal[] = new String[100];
+
         //start_terminal=DB.start(); ********************************************************************
         // '출발 터미널' 콤보박스에 정류장 리스트 삽입
         start.setPreferredSize(new Dimension(220,30));

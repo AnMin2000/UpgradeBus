@@ -122,7 +122,7 @@ public class SignUpUi extends JFrame{
             public void actionPerformed(ActionEvent e) {
                     UserID = IDTextField.getText();
                     try {
-
+                        System.out.println(UserID);
                         check = connect.Overlap(UserID);
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
