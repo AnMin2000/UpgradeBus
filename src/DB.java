@@ -194,4 +194,11 @@ public class DB {
 
         pstmt.executeUpdate();
     }
+    public void userDelete(String userId) throws SQLException {
+        String sql = " Delete From client where userId = ? ";
+        pstmt = conn.prepareStatement(sql);
+
+        pstmt.setString(1,userId);
+        pstmt.executeUpdate();
+    }
 }

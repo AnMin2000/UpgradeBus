@@ -30,7 +30,7 @@ public class AdminUi {
 
                     if(state == true){
                         c.dispose();
-                        new Bus();
+                        new BusList("Null");
                     }
                     else {
                         return;
