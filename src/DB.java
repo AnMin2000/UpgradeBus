@@ -181,4 +181,17 @@ public class DB {
         pstmt.executeUpdate();
     }
 
+    public void timeDelete(String timeId, String busNum, String startRe, String endRe, String startT, String endT) throws SQLException {
+        String sql = " Delete From timetable where timeId = ? and busNum = ? and startRe = ? and endRe = ? and startT = ? and endT = ? ";
+        pstmt = conn.prepareStatement(sql);
+
+        pstmt.setString(1,timeId);
+        pstmt.setString(2,busNum);
+        pstmt.setString(3,startRe);
+        pstmt.setString(4,endRe);
+        pstmt.setString(5,startT);
+        pstmt.setString(6,endT);
+
+        pstmt.executeUpdate();
+    }
 }

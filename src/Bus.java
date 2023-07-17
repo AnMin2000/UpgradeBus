@@ -20,7 +20,6 @@ public class Bus{
     private JTextField EndRe;
     private JLabel DefaultLabel;
     private JPanel Look;
-    private JPanel ListPanel;
     private JButton SortButton;
     private JButton ListButton;
     private JList AddrerssList;
@@ -42,12 +41,12 @@ public class Bus{
 
         DefaultListModel model = new DefaultListModel();
 
-        ResultSet rs = connect.print(" * ", " timetable ",
-                "Null", "Null", "Null", "Null");
-
-        while (rs.next()){
-        model.addElement(rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4)+ " " + rs.getString(5) + " " + rs.getString(6));
-        }
+//        ResultSet rs = connect.print(" * ", " timetable ",
+//                "Null", "Null", "Null", "Null");
+//
+//        while (rs.next()){
+//        model.addElement(rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4)+ " " + rs.getString(5) + " " + rs.getString(6));
+//        }
         AddrerssList.setModel(model);
         AppendButton.addActionListener(new ActionListener() {
             @Override
@@ -60,21 +59,11 @@ public class Bus{
                     String VStartT = StratT.getText();
                     String VEndT = EndT.getText();
 
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-                    Date startDate;
-                    Date endDate;
-                    try {
-                        startDate = dateFormat.parse(VStartT);
-                        endDate = dateFormat.parse(VEndT);
-                    } catch (ParseException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    // datetime 형식으로 변환
-                    String formattedStartT = dateFormat.format(startDate);
-                    String formattedEndT = dateFormat.format(endDate);
 
-                    String[] PrArr = new String[]{VtimeId, VBusNum, VStartRe, VEndRe, formattedStartT, formattedEndT};
+
+
+                    String[] PrArr = new String[]{VtimeId, VBusNum, VStartRe, VEndRe, VStartT, VEndT};
                     connect.insert("timetable", 6, PrArr);
 
                     model.addElement(VtimeId + " " + VBusNum + " " + VStartRe + " " + VEndRe + " " + VStartT + " " + VEndT);
