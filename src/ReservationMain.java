@@ -6,6 +6,8 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.reflect.Array;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import java.text.*;
 import java.time.LocalDate;
@@ -150,8 +152,8 @@ class TicketOneWay extends JPanel implements MouseListener {
 
     // 표 테이블 생성
     public TicketOneWay() {
-        String[] title = {"출발시간","회사","등급","잔여석","요금"}; // 컬럼 네임 설정
-        String[][] row = new String[0][5];                    // 표들
+        String[] title = {"출발시간","회사","등급","요금"}; // 컬럼 네임 설정
+        String[][] row = new String[0][4];                    // 표들
         model = new DefaultTableModel(row,title);	// 열 이름 추가, 행은 0개 지정
 
         table = new JTable(model);   // 표 테이블 생성
@@ -185,7 +187,7 @@ class TicketOneWay extends JPanel implements MouseListener {
         len = t.starttime.size();
         // 표 테이블에 티켓 정보 삽입
         for (int i = 0; i < len; i++) {
-            String[] data = {t.starttime.get(i), t.company.get(i), t.class_.get(i), String.valueOf(t.seats.get(i)), String.valueOf(t.price.get(i))};
+            String[] data = {t.starttime.get(i), t.company.get(i), t.class_.get(i), String.valueOf(t.price.get(i))};
             model.addRow(data);
         }
 
@@ -198,7 +200,7 @@ class TicketOneWay extends JPanel implements MouseListener {
     // 테이블에서 행 선택 시 이벤트 처리
     @Override
     public void mouseClicked(MouseEvent e) {
-        String[] info = new String[5];     // 추출한 정보를 담을 배열
+        String[] info = new String[4];     // 추출한 정보를 담을 배열
         int row = table.getSelectedRow();  // 테이블에서 선택한 행 인덱스 가져오기
 
         // 선택한 행에 대한 전체 데이터 추출
@@ -255,7 +257,7 @@ class ReservationCenter extends JPanel {
     static JComboBox<String> end = new JComboBox<String>();     // 도착 터미널 콤보박스
     static JComboBox<String> date = new JComboBox<String>();    // 출발 날짜 콤보박스
     //DB_connect DB = new DB_connect(); ********************************************************************
-    public ReservationCenter(ReservationMain frame, String id) {
+    public ReservationCenter(ReservationMain frame, String id) throws SQLException, ClassNotFoundException {
         setLayout(null);
         Color bgmycor=new Color(166,222,249);
         setBackground(bgmycor);
@@ -317,6 +319,13 @@ class ReservationCenter extends JPanel {
         String end_terminal[] = new String[100];
 
         //start_terminal=DB.start(); ********************************************************************
+        ResultSet rs = new DB().print("distinct startRegion","timetable","Null","Null","Null","Null");
+        int index = 0;
+        while (rs.next() && index < 100) {
+            start_terminal[index] = rs.getString(1);
+            index++;
+        }
+
         // '출발 터미널' 콤보박스에 정류장 리스트 삽입
         start.setPreferredSize(new Dimension(220,30));
         //start_terminal = DB.start().toArray(new String[0]);
@@ -328,6 +337,12 @@ class ReservationCenter extends JPanel {
         // '도착 터미널' 콤보박스에 정류장 리스트 삽입
         end.setPreferredSize(new Dimension(220,30));
         //end_terminal = DB.end(); ********************************************************************
+        rs = new DB().print("distinct endRegion","timetable","Null","Null","Null","Null");
+        index = 0;
+        while (rs.next() && index < 100) {
+            end_terminal[index] = rs.getString(1);
+            index++;
+        }
         for (int i=0; i<end_terminal.length; i++){
             end.addItem(end_terminal[i]);
         }
@@ -442,7 +457,7 @@ class ReservationCenter extends JPanel {
 
 // '예약하기' 화면의 메인 부분
 public class ReservationMain extends JFrame {
-    public ReservationMain(String id) {
+    public ReservationMain(String id) throws SQLException, ClassNotFoundException {
         setTitle("예약");
         setSize(1000,800);
         setResizable(false);
@@ -457,7 +472,7 @@ public class ReservationMain extends JFrame {
 
         setVisible(true);
     }
-    public static void main(String[] args){
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
         new ReservationMain("null");
     }
 

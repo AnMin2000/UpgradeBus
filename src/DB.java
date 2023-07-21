@@ -182,7 +182,7 @@ public class DB {
     }
 
     public void timeDelete(String timeId, String busNum, String startRe, String endRe, String startT, String endT) throws SQLException {
-        String sql = " Delete From timetable where timeId = ? and busNum = ? and startRe = ? and endRe = ? and startT = ? and endT = ? ";
+        String sql = " Delete From timetable where timeId = ? and busNum = ? and startRegion = ? and endRegion = ? and startTime = ? and endTime = ? ";
         pstmt = conn.prepareStatement(sql);
 
         pstmt.setString(1,timeId);
