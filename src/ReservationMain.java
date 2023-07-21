@@ -21,12 +21,8 @@ class Ticket {
     ArrayList<Integer> seats = new ArrayList<Integer>();
     ArrayList<Integer> price = new ArrayList<Integer>();
 
-    public void insertTicket(String starttime, String company, String class_, int seats, int price) {
+    public void insertTicket(String starttime) {
         this.starttime.add(starttime);
-        this.company.add(company);
-        this.class_.add(class_);
-        this.seats.add(seats);
-        this.price.add(price);
     }
 }
 
@@ -36,8 +32,8 @@ class DuringDateTest {
     int length;                        // 배열에 저장된 날짜의 개수를 담을 변수
 
     public DuringDateTest() {
-        String startDt = "20211201";  // 시작 날짜
-        int endDt = 20211231;        // 끝 날짜
+        String startDt = "20230801";  // 시작 날짜
+        int endDt = 20230831;        // 끝 날짜
 
         int startYear = Integer.parseInt(startDt.substring(0,4));   // 시작 날짜에서 연도만 잘라서 저장
         int startMonth= Integer.parseInt(startDt.substring(4,6));   // 시작 날짜에서 월만 잘라서 저장
@@ -167,27 +163,22 @@ class TicketOneWay extends JPanel implements MouseListener {
     }
 
     // 표 테이블에 데이터 추가
-    public void showTicket(Ticket t, String start, String end, String date) {
+    public void showTicket(String start, String end, String date) {
 
-        // 중복 제거
-        if (this.start.equals(start) && this.end.equals(end) && this.date.equals(date)) return;
 
-        // 중복 출력을 방지하기 위해 출발 정류장, 도착 정류장 이름 기억
-        this.start = start;
-        this.end = end;
-        this.date = date;
-
-        // 이미 한 번 조회한 적이 있을 경우 테이블 리셋
-        if (this.start != "시작") {
-            for (int i = len-1; i >= 0; i--) {
-                this.model.removeRow(i);
-            }
-        }
-
-        len = t.starttime.size();
         // 표 테이블에 티켓 정보 삽입
-        for (int i = 0; i < len; i++) {
-            String[] data = {t.starttime.get(i), t.company.get(i), t.class_.get(i), String.valueOf(t.price.get(i))};
+        for (int i = 0; i < 10; i++) {
+            //출발시간 회사 등급 요금
+            String[] data = {"09:00","우진관광","일반","9000원",
+                    "10:00","우진관광","일반","9000원",
+                    "11:00","우진관광","일반","9000원",
+                    "12:00","우진관광","일반","9000원",
+                    "13:00","우진관광","일반","9000원",
+                    "14:00","우진관광","일반","9000원",
+                    "15:00","우진관광","일반","9000원",
+                    "16:00","우진관광","일반","9000원",
+                    "17:00","우진관광","일반","9000원",
+                    "18:00","우진관광","일반","9000원"};
             model.addRow(data);
         }
 
@@ -419,9 +410,13 @@ class ReservationCenter extends JPanel {
                 String ed = end.getSelectedItem().toString();
                 String dt = date.getSelectedItem().toString();
 
+
                 // DB로 시작 터미널, 도착 터미널 정보 보내기
-                // Ticket t = DB.ticket_load(st, ed, dt); ********************************************************************
-                //    tow.showTicket(t, st, ed, dt);  ********************************************************************
+
+
+                    tow.showTicket(st, ed, dt);
+
+
             }
         });
 

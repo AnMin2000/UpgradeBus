@@ -7,12 +7,14 @@ import java.util.List;
 public class DB {
     PreparedStatement pstmt;
     Connection conn = null;
+
     DB() throws ClassNotFoundException, SQLException {
         String dbUrl = "jdbc:mysql://localhost:3306/bus";
         String dbID = "root";
         String dbPassword = "0000";
         conn = DriverManager.getConnection(dbUrl, dbID, dbPassword);
     }
+
     public void insert(String name, int number, String[] PrName) throws SQLException, ParseException {
         //name : 테이블 이름, number : 해당 디비 컬럼 갯수, PrName : 디비에 입력 할 값들
         String sql;
@@ -32,21 +34,20 @@ public class DB {
         }
         pstmt.executeUpdate();
     }
-    public ResultSet print(String selectName, String tableName, String sqlName, String data, String sqlName2, String data2 ) throws SQLException {
+
+    public ResultSet print(String selectName, String tableName, String sqlName, String data, String sqlName2, String data2) throws SQLException {
 
         String ValuesVar = "?";
 
         String sql;
-        if(sqlName.equals("Null")) {
+        if (sqlName.equals("Null")) {
             sql = "SELECT " + selectName + " FROM " + tableName;
             pstmt = conn.prepareStatement(sql);
-        }
-        else if(sqlName2.equals("Null")){
-            sql = "SELECT " + selectName + " FROM " + tableName + " WHERE " + sqlName + " = " +  "?" ;
+        } else if (sqlName2.equals("Null")) {
+            sql = "SELECT " + selectName + " FROM " + tableName + " WHERE " + sqlName + " = " + "?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, data);
-        }
-        else{
+        } else {
             sql = "SELECT " + selectName + " FROM " + tableName +
                     " WHERE " + sqlName + " =  +  ? and " + sqlName2 + " =  + ?";
 //            " = " +  "? and " + sqlName2 + " = " + "?";
@@ -58,6 +59,7 @@ public class DB {
 
         return rs;
     }
+
     public boolean Overlap(String ID) throws SQLException {
         try {
             String sql = "select * from client where userID = ?";
@@ -70,7 +72,7 @@ public class DB {
                 JOptionPane.showMessageDialog(null, "아이디 중복");
                 return false;
             }
-        }catch (SQLException ex) {
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "사용 가능 아이디");
             return true;
         }
@@ -91,13 +93,14 @@ public class DB {
                 JOptionPane.showMessageDialog(null, "로그인 성공");
                 return true;
             }
-        }catch (SQLException ex) {
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "로그인 실패");
             return false;
         }
         return false;
     }
-    public boolean AdminLogin(String Id, String Pw) throws SQLException{
+
+    public boolean AdminLogin(String Id, String Pw) throws SQLException {
         try {
             String sql = "select * from admin where adminID = ? and pwd = ? ";
             pstmt = conn.prepareStatement(sql);
@@ -108,12 +111,13 @@ public class DB {
             if (!(rs.getString(1)).equals("Null")) {
                 return true;
             }
-        }catch (SQLException ex) {
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "로그인 실패");
             return false;
         }
         return false;
     }
+
     public boolean checkReserve(int Id) throws SQLException {
         String sql = "select reserveID from reserve where reserveID = ? ";
         pstmt = conn.prepareStatement(sql);
@@ -124,7 +128,7 @@ public class DB {
         while (rs.next()) {
             search = rs.getInt(1);
         }
-        if(search == -1){
+        if (search == -1) {
             return true;
         }
         return false;
@@ -138,6 +142,7 @@ public class DB {
         pstmt.setString(3, busID);
         pstmt.executeUpdate();
     }
+
     public List<String> getReservedSeats() throws SQLException {
         List<String> reservedSeats = new ArrayList<>();
 
@@ -155,6 +160,7 @@ public class DB {
 
         return reservedSeats;
     }
+
     public ResultSet join(String vUserID) throws SQLException {
         String sql = " SELECT r.reserveID, startRegion, endRegion, startTime, endTime, STUFF((SELECT ',' + seatID " +
                 " FROM seat s " +
@@ -185,20 +191,42 @@ public class DB {
         String sql = " Delete From timetable where timeId = ? and busNum = ? and startRegion = ? and endRegion = ? and startTime = ? and endTime = ? ";
         pstmt = conn.prepareStatement(sql);
 
-        pstmt.setString(1,timeId);
-        pstmt.setString(2,busNum);
-        pstmt.setString(3,startRe);
-        pstmt.setString(4,endRe);
-        pstmt.setString(5,startT);
-        pstmt.setString(6,endT);
+        pstmt.setString(1, timeId);
+        pstmt.setString(2, busNum);
+        pstmt.setString(3, startRe);
+        pstmt.setString(4, endRe);
+        pstmt.setString(5, startT);
+        pstmt.setString(6, endT);
 
         pstmt.executeUpdate();
     }
+
     public void userDelete(String userId) throws SQLException {
         String sql = " Delete From client where userId = ? ";
         pstmt = conn.prepareStatement(sql);
 
-        pstmt.setString(1,userId);
+        pstmt.setString(1, userId);
         pstmt.executeUpdate();
+    }
+
+    public Ticket ticket_load(String start, String end, String date) throws SQLException {
+        ResultSet rs = null;
+        Ticket t = new Ticket();
+        String SQL = "SELECT starttime FROM timetable WHERE start = '" + start + "' ";
+        System.out.println(SQL);
+        pstmt = conn.prepareStatement(SQL);
+//            pstmt.setString(0, start);
+//            pstmt.setString(0, end);
+        rs = pstmt.executeQuery(SQL);
+
+        while (rs.next()) {
+            String starttime = rs.getString(1);
+
+
+            t.insertTicket(starttime);
+
+            return t;
+        }
+        return null;
     }
 }
