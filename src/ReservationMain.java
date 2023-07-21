@@ -165,22 +165,42 @@ class TicketOneWay extends JPanel implements MouseListener {
     // 표 테이블에 데이터 추가
     public void showTicket(String start, String end, String date) {
 
+        String[][] groupedData = new String[10][4];
 
-        // 표 테이블에 티켓 정보 삽입
+        int index = 0; // Index to keep track of the current position in the groupedData array
+
         for (int i = 0; i < 10; i++) {
-            //출발시간 회사 등급 요금
-            String[] data = {"09:00","우진관광","일반","9000원",
-                    "10:00","우진관광","일반","9000원",
-                    "11:00","우진관광","일반","9000원",
-                    "12:00","우진관광","일반","9000원",
-                    "13:00","우진관광","일반","9000원",
-                    "14:00","우진관광","일반","9000원",
-                    "15:00","우진관광","일반","9000원",
-                    "16:00","우진관광","일반","9000원",
-                    "17:00","우진관광","일반","9000원",
-                    "18:00","우진관광","일반","9000원"};
-            model.addRow(data);
+            // 출발시간 회사 등급 요금
+            String[] data = {"09:00", "우진관광", "일반", "9000원",
+                    "10:00", "영호관광", "일반", "9,000원",
+                    "11:00", "금왕관광", "우등", "11,000원",
+                    "12:00", "우진관광", "일반", "9,000원",
+                    "13:00", "우진관광", "우등", "11,000원",
+                    "14:00", "금왕관광", "우등", "11,000원",
+                    "15:00", "금왕관광", "일반", "9,000원",
+                    "16:00", "영호관광", "우등", "11,000원",
+                    "17:00", "금왕관광", "일반", "9,000원",
+                    "18:00", "우진관광", "일반", "9,000원"};
+
+            // Extract the data for the current hour (i.e., i * 4)
+            String[] hourData = new String[4];
+            System.arraycopy(data, i * 4, hourData, 0, 4);
+
+            // Update the fare to 9000원 if it exceeds the limit
+            int fareIndex = 3; // Index of the fare within the data array
+            int fare = Integer.parseInt(hourData[fareIndex].replaceAll("[^0-9]", ""));
+            if (fare > 9000) {
+                hourData[fareIndex] = "9000원";
+            }
+
+            // Add the hourData to the groupedData array
+            groupedData[index] = hourData;
+            index++;
+
+            // Insert the row to the JTable
+            ((DefaultTableModel) table.getModel()).insertRow(i, hourData);
         }
+
 
         // 선택한 표에 대한 정보 가져오기
         table.addMouseListener(this);
@@ -425,21 +445,16 @@ class ReservationCenter extends JPanel {
             String st = null;
             String ed = null;
             String dt = null;
-            String[] info = null;
+
             public void mouseClicked(MouseEvent e) {
                 this.st = tow.getStart();
                 this.ed = tow.getEnd();
                 this.dt = tow.getDate();
-                this.info = tow.getArr();
 
-                if (this.info == null) {
-                    JOptionPane.showMessageDialog(null, "표를 선택하세요.");
-                }
-                else {
                     // 출발 터미널, 도착 터미널, 출발 날짜 등의 정보를 좌석 선택 페이지로 넘겨줌
-                   // new SeatsSelect(frame, id, st, ed, dt, info); **********************************************************
+                    new SeatsSelect(frame, id, st, ed, dt); //**********************************************************
                     frame.setVisible(false);
-                }
+
             }
         });
         ImageIcon background = new ImageIcon("C:/Users/user/IdeaProjects/Hello-World--main/Hello-World--main/project__java/buspj/image/test.jpg");

@@ -1,5 +1,6 @@
 import java.awt.*;             // 폰트 등 그래픽 처리를 위한 클래스들의 경로명
 import java.awt.event.*;       // 이벤트 처리에 필요한 기본 클래스들의 경로명
+import java.sql.SQLException;
 import javax.swing.*;          // 스윙 컴포넌트 클래스들 경로명
 
 
@@ -198,8 +199,15 @@ class CenterPanel extends JPanel {
         // 예매하기 클릭 시 이벤트
         reservation.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-               // new ReservationMain(id);
-              //  frame.dispose();            **************************수정***********************************
+                try {
+                    frame.dispose();
+                    new ReservationMain(id);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+                //  frame.dispose();            **************************수정***********************************
             }
         });
         checkUp.addMouseListener(new MouseAdapter() {
