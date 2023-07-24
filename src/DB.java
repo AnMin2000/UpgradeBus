@@ -79,23 +79,21 @@ public class DB {
 
 
     public boolean Login(String Id, String Pw) throws SQLException {
-        try {
+
             String sql = "select * from client where userID = ? and pwd = ? ";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, Id);
             pstmt.setString(2, Pw);
             ResultSet rs = pstmt.executeQuery();
-            rs.next();
+            //rs.next();
 
-            if ((rs.getString(1)).equals(Id) && rs.getString(2).equals(Pw)) {
-                JOptionPane.showMessageDialog(null, "로그인 성공");
-                return true;
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "로그인 실패");
+        if (rs.next()) {
+            // Success
+            return true;
+        } else {
+            // Failure
             return false;
         }
-        return false;
     }
 
     public boolean AdminLogin(String Id, String Pw) throws SQLException {

@@ -129,6 +129,12 @@ public class SignUpUi extends JFrame{
                     UserID = IDTextField.getText();
                     try {
                         check = client.checkOverlap(UserID);
+                        if(check == false){
+                             JOptionPane.showMessageDialog(null, "아이디 중복");
+                        }
+                        else{
+                             JOptionPane.showMessageDialog(null, "사용가능 아이디");
+                        }
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     } catch (ClassNotFoundException ex) {

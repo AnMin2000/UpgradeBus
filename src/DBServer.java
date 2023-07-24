@@ -45,7 +45,7 @@ public class DBServer {
                     String request = (String) in.readObject();
                     String[] requestData = request.split(":");
                     String operation = requestData[0];
-
+                    System.out.println(operation);
                     switch (operation) {
                         case "INSERT":
                             String name = requestData[1];
@@ -68,12 +68,15 @@ public class DBServer {
                         case "LOGIN":
                             String userId = requestData[1];
                             String password = requestData[2];
+                           // System.out.println(userId + password);
                             boolean loginResult = db.Login(userId, password);
+                            System.out.println(loginResult);
                             out.writeObject(loginResult ? "LOGIN_SUCCESS" : "LOGIN_FAILURE");
                             break;
                         case "CHECK_OVERLAP":
                             String checkUserId = requestData[1];
                             boolean overlapResult = db.Overlap(checkUserId);
+                         //   System.out.println(overlapResult);
                             out.writeObject(overlapResult ? "ID_NOT_EXISTS" : "ID_EXISTS");
                             break;
                         // UPDATE, DELETE 등 다른 작업에 대한 case도 추가 가능

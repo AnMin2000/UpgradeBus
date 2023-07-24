@@ -4,14 +4,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class LoginUi extends JFrame{
     private JPanel JPanel1;
     private JTextField IdTextField;
     private JTextField PwTextField;
+    private DBClient client;
 
     public LoginUi(){
+        try {
+            client = new DBClient("localhost", 12345); // 서버의 IP 주소와 포트 번호로 변경
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 ///
         setTitle("Login");
         setResizable(false);
@@ -100,20 +107,22 @@ public class LoginUi extends JFrame{
                     String UserId = IdTextField.getText();
                     String UserPw = PwTextField.getText();
 
-                    boolean state = new DB().Login(UserId, UserPw);
+                    boolean state = client.LogIn(UserId,UserPw);
                     // 관리자 로그인 알고리즘 추가하기
 
                     if(state == true){
+                        JOptionPane.showMessageDialog(null, "로그인 성공");
                         dispose();
                         new MainUi(UserId);
 
                     }
-                    else {
+                    else{
+                        JOptionPane.showMessageDialog(null, "로그인 실패");
                         return;
                     }
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
                 } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
             }

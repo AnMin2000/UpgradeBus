@@ -15,22 +15,33 @@ public class DBClient {
 
     public boolean checkOverlap(String ID) throws IOException, ClassNotFoundException {
 
-        String request = "중복검사:" + ID;
+        String request = "CHECK_OVERLAP:" + ID;
         out.writeObject(request);
 
         String response = (String) in.readObject();
 
         System.out.println(response);
-        // JOptionPane.showMessageDialog(null, "아이디 중복");
+
         return response.equals("ID_NOT_EXISTS");
 
     }
-    public void insert(String name, int number, String[] values) throws IOException, ClassNotFoundException {
-        String request = "INSERT:" + name + ":" + number + ":" + String.join(",", values);
+    public void insert(String tableName, int number, String[] values) throws IOException, ClassNotFoundException {
+        String request = "INSERT:" + tableName + ":" + number + ":" + String.join(",", values);
         out.writeObject(request);
 
         String response = (String) in.readObject();
         System.out.println(response); // 필요에 따라 응답 처리
     }
+    public boolean LogIn(String ID, String PW) throws IOException, ClassNotFoundException {
 
+        String request = "LOGIN:" + ID + ":" + PW;
+        out.writeObject(request);
+
+        String response = (String) in.readObject();
+
+        System.out.println(response);
+
+        return response.equals("LOGIN_SUCCESS");
+
+    }
 }
