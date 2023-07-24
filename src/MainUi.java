@@ -68,8 +68,8 @@ class LoginAndSignup extends JPanel {
         // 마이페이지 버튼 클릭 시 이벤트
         myButton.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-             //   new MyPage(id); **************************수정***********************************
-             //  frame.dispose();
+                new MyPage(id); //**************************수정***********************************
+               frame.dispose();
             }
         });
 
@@ -200,8 +200,8 @@ class CenterPanel extends JPanel {
         reservation.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 try {
-                    frame.dispose();
                     new ReservationMain(id);
+                    frame.dispose();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 } catch (ClassNotFoundException ex) {
@@ -212,13 +212,14 @@ class CenterPanel extends JPanel {
         });
         checkUp.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-              //  new ReservationCheckUp(id);
+                new ReservationCheckUp(id);
+                frame.dispose();
             }
         });
         chatBot.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-               // new ChatBot(id);
-                //frame.dispose();           **************************수정***********************************
+                new ChatBot(id);
+                frame.dispose();          // **************************수정***********************************
             }
         });
     }
