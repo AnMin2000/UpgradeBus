@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 
@@ -14,8 +15,14 @@ public class SignUpUi extends JFrame{
     private JTextField EmailTestField;
     String UserID, UserPassWd, Username, Usernumber;
     public boolean check;
+    private DBClient client;
     public SignUpUi() throws SQLException, ClassNotFoundException {
 
+        try {
+            client = new DBClient("localhost", 12345); // 서버의 IP 주소와 포트 번호로 변경
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         ///////////
         setTitle("회원가입");
         //setResizable(false);
@@ -116,15 +123,15 @@ public class SignUpUi extends JFrame{
 
         add(panel1);
         setVisible(true);
-        DB connect = new DB();
         idck.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                     UserID = IDTextField.getText();
                     try {
-                        System.out.println(UserID);
-                        check = connect.Overlap(UserID);
-                    } catch (SQLException ex) {
+                        check = client.checkOverlap(UserID);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    } catch (ClassNotFoundException ex) {
                         throw new RuntimeException(ex);
                     }
             }
@@ -144,12 +151,12 @@ public class SignUpUi extends JFrame{
 
                 String[] PrArr = new String[]{UserID,UserPassWd,Username,Usernumber};
                 try {
-                    connect.insert("client",4,PrArr);
+                    client.insert("client", 4, PrArr);
                     dispose();
                     new MainUi("NULL");
-                } catch (SQLException ex) {
+                } catch (IOException ex) {
                     throw new RuntimeException(ex);
-                } catch (ParseException ex) {
+                } catch (ClassNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }
             }

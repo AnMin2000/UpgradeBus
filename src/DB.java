@@ -69,11 +69,9 @@ public class DB {
             rs.next();
             //System.out.println(rs.getString(2));
             if (rs.getString(1).equals(ID)) {
-                JOptionPane.showMessageDialog(null, "아이디 중복");
                 return false;
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "사용 가능 아이디");
             return true;
         }
         return false;
