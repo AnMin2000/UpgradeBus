@@ -12,6 +12,18 @@ public class DBClient {
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
     }
+    public void sendChatMessage(String message) throws IOException, ClassNotFoundException {
+        String request = "CHAT:" + message;
+        out.writeObject(request);
+
+        // 서버로부터 받은 응답을 처리하는 로직을 추가할 수 있습니다.
+    }
+    public void sendConsultMessage(String message) throws IOException, ClassNotFoundException {
+        String request = "Consult:" + message;
+        out.writeObject(request);
+
+        // 서버로부터 받은 응답을 처리하는 로직을 추가할 수 있습니다.
+    }
 
     public boolean checkOverlap(String ID) throws IOException, ClassNotFoundException {
 

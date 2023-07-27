@@ -2,24 +2,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
+import java.io.IOException;
 
 
-public class ChatBot extends JFrame implements ActionListener{
+public class Customer extends JFrame implements ActionListener{
     JTextArea txtA = new JTextArea(7,0);
     JTextField txtF = new JTextField(30);
-
-
     JButton btnTransfer;
     JButton btnExit;
     boolean isFirst=true;
     JPanel p1 = new JPanel();
+    private DBClient client;
 
-    public ChatBot(String id) {
+
+    public Customer(String id) {
         super("챗봇 문의상담");
 
 
@@ -63,66 +59,57 @@ public class ChatBot extends JFrame implements ActionListener{
         p1.add(btnTransfer);
         p1.add(btnExit);
         add("South", p1);
-        String hello = "안녕하세요 "+ id+"님 버스안내 챗봇입니다!\n" +
+        String hello = "상담 서비스"+ id + "님 버스안내 챗봇입니다!\n" +
                 "궁금한게 있으신가요??";
         txtA.append("[챗봇]"+ hello+"\n");
         btnTransfer.addActionListener(this);
         btnExit.addActionListener(this);
 
-        this.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent w) {
-                ChatBot.this.dispose();
-              //  new MainUi("dksals");
-            }
-        });
+//        this.addWindowListener(new WindowAdapter() {
+//            public void windowClosing(WindowEvent w) {
+//                ChatBot.this.dispose();
+//                // 서버와 연결을 종료해야 하므로 DBClient 인스턴스를 사용하여 연결 종료 로직을 추가합니다.
+//                try {
+//                    client.closeConnection();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
         setSize(580,500);
         setVisible(true);
+        try {
+            client = new DBClient("localhost", 12345);
 
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "서버에 연결할 수 없습니다.", "에러", JOptionPane.ERROR_MESSAGE);
+            this.dispose(); // 연결 실패 시 프로그램 종료
+        }
     }
     public void actionPerformed(ActionEvent e){
         String id = "나";
         String input = txtF.getText();
-        if(e.getSource()==btnTransfer){//전송버튼 눌렀을 경우
-            //메세지 입력없이 전송버튼만 눌렀을 경우
-            if(input.equals("")){
+        if (e.getSource() == btnTransfer) { // 전송 버튼 눌렀을 경우
+            // 메시지 입력 없이 전송 버튼만 눌렀을 경우
+            if (input.equals("")) {
                 return;
             }
-            txtA.append("["+id+"] "+ input+"\n");
+            txtA.append("[" + id + "] " + input + "\n");
             txtF.setText("");
 
-            //String arr[] = new String[10]; //답변 배열
-            ArrayList<String> arrs = new ArrayList<String>(); //답변 배열
-
-                StringTokenizer tk = new StringTokenizer(input," ");
-                int n = tk.countTokens(); // input 토큰 갯수
-                int ck = 0; // 체크포인트
-                for (int k=0; k<n; k++){
-                    if (ck==1){
-                        break;
-                    }
-                    input = tk.nextToken();
-                }
-
-                String answer="";
-
-                System.out.println("<"+answer+">");
-                //txtA.append("[챗봇] "+ new String(rs.getString("answer"))+"\n");
-                if (answer.equals("")){
-                    txtA.append("[챗봇] "+ "이해하지못했습니다. 죄송합니다 ㅠㅠ " +"\n");
-                    txtF.setText("");
-                }
-                else {
-                    txtA.append("[챗봇] "+ answer +"\n");
-                    txtF.setText("");
-                }
-
-        }else{
+            // 채팅 메시지를 서버로 전송합니다.
+            try {
+                client.sendChatMessage(input);
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        } else {
             this.dispose();
         }
-
     }
     public static void main(String[] args){
-        new ChatBot("dksals");
+        new Customer("dksals");
     }
 }

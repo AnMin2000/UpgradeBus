@@ -218,7 +218,7 @@ class CenterPanel extends JPanel {
         });
         chatBot.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                new ChatBot(id);
+                new Customer("dksals");
                 frame.dispose();          // **************************수정***********************************
             }
         });

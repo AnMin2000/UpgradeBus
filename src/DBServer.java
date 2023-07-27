@@ -4,12 +4,16 @@ import java.net.Socket;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBServer {
     private DB db;
+    private List<ClientHandler> clientHandlers; // 클라이언트 핸들러들을 저장하는 리스트
 
     public DBServer() throws ClassNotFoundException, SQLException {
         db = new DB();
+        clientHandlers = new ArrayList<>();
     }
 
     public void startServer(int port) {
@@ -47,6 +51,13 @@ public class DBServer {
                     String operation = requestData[0];
                     System.out.println(operation);
                     switch (operation) {
+                        case "CHAT":
+                            String message = requestData[1];
+                            System.out.println("메시지 수신: " + message);
+                            // 채팅 메시지를 다른 클라이언트로 전송하는 로직을 추가합니다.
+                            // 여기서는 수신한 메시지를 해당 클라이언트에 연결된 다른 클라이언트에게 보내는 방식으로 구현합니다.
+                            sendChatMessageToOtherClients(message);
+                            break;
                         case "INSERT":
                             String name = requestData[1];
                             int number = Integer.parseInt(requestData[2]);
@@ -92,6 +103,14 @@ public class DBServer {
                     clientSocket.close();
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+            }
+        }
+        private void sendChatMessageToOtherClients(String message) throws IOException {
+            // 모든 클라이언트 핸들러를 순회하며 수신한 메시지를 전달합니다.
+            for (ClientHandler clientHandler : clientHandlers) {
+                if (clientHandler != this) {
+                    clientHandler.out.writeObject("CHAT:" + message);
                 }
             }
         }
