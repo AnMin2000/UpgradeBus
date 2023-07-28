@@ -21,10 +21,19 @@ public class Consult extends JFrame implements ActionListener{
     private PrintWriter out;
     boolean isFirst=true;
     JPanel p1 = new JPanel();
+    private DBClient client;
 
     public Consult(String id) {
         super("상담원");
 
+        try {
+            client = new DBClient("Consult", 12345);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "서버에 연결할 수 없습니다.", "에러", JOptionPane.ERROR_MESSAGE);
+            this.dispose(); // 연결 실패 시 프로그램 종료
+        }
 
         ImageIcon del1 = new ImageIcon("C:/Users/user/IdeaProjects/Hello-World--main/Hello-World--main/project__java/buspj/image/send1.png");
         Image del11 = del1.getImage();
@@ -85,28 +94,29 @@ public class Consult extends JFrame implements ActionListener{
 
         setSize(580,500);
         setVisible(true);
-        try {
-            serverSocket = new ServerSocket(8080);
-            System.out.println("상담원 서버 시작. 포트 8080에서 대기 중");
-
-            // 클라이언트와 연결 대기
-            clientSocket = serverSocket.accept();
-            System.out.println("사용자와 연결됨");
-
-
-            // 클라이언트와 데이터 통신을 위한 입출력 스트림 생성
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-
-            // 클라이언트로부터 메시지 수신 대기
-            new Thread(this::receiveMessage).start();
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "서버에 연결할 수 없습니다.", "에러", JOptionPane.ERROR_MESSAGE);
-            this.dispose(); // 연결 실패 시 프로그램 종료
-        }
+//        try {
+//            client = new DBClient("Consult", 8080);
+//          //  serverSocket = new ServerSocket(8080);
+//            System.out.println("상담원 서버 시작. 포트 8080에서 대기 중");
+//
+//            // 클라이언트와 연결 대기
+//            clientSocket = serverSocket.accept();
+//            System.out.println("사용자와 연결됨");
+//
+//
+//            // 클라이언트와 데이터 통신을 위한 입출력 스트림 생성
+//            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+//            out = new PrintWriter(clientSocket.getOutputStream(), true);
+//
+//            // 클라이언트로부터 메시지 수신 대기
+//            new Thread(this::receiveMessage).start();
+//
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            JOptionPane.showMessageDialog(this, "서버에 연결할 수 없습니다.", "에러", JOptionPane.ERROR_MESSAGE);
+//            this.dispose(); // 연결 실패 시 프로그램 종료
+//        }
     }
     private void receiveMessage() {
         try {
