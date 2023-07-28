@@ -80,7 +80,7 @@ public class Customer extends JFrame implements ActionListener{
         setSize(580,500);
         setVisible(true);
         try {
-            client = new DBClient("localhost", 12345);
+            client = new DBClient("localhost", 8080);
 
         } catch (IOException e) {
             e.printStackTrace();

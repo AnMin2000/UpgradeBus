@@ -86,12 +86,13 @@ public class Consult extends JFrame implements ActionListener{
         setSize(580,500);
         setVisible(true);
         try {
-            serverSocket = new ServerSocket(12345);
-            System.out.println("상담원 서버 시작. 포트 12345에서 대기 중");
+            serverSocket = new ServerSocket(8080);
+            System.out.println("상담원 서버 시작. 포트 8080에서 대기 중");
 
             // 클라이언트와 연결 대기
             clientSocket = serverSocket.accept();
             System.out.println("사용자와 연결됨");
+
 
             // 클라이언트와 데이터 통신을 위한 입출력 스트림 생성
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));

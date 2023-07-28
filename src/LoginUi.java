@@ -120,9 +120,9 @@ public class LoginUi extends JFrame{
                         JOptionPane.showMessageDialog(null, "로그인 실패");
                         return;
                     }
-                } catch (ClassNotFoundException ex) {
-                    throw new RuntimeException(ex);
                 } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }
             }
