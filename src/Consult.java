@@ -27,12 +27,9 @@ public class Consult extends JFrame implements ActionListener{
         super("상담원");
 
         try {
-            client = new DBClient("Consult", 12345);
-
+            client = new DBClient("localhost", 12345); // 서버의 IP 주소와 포트 번호로 변경
         } catch (IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "서버에 연결할 수 없습니다.", "에러", JOptionPane.ERROR_MESSAGE);
-            this.dispose(); // 연결 실패 시 프로그램 종료
         }
 
         ImageIcon del1 = new ImageIcon("C:/Users/user/IdeaProjects/Hello-World--main/Hello-World--main/project__java/buspj/image/send1.png");

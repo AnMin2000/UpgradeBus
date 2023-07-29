@@ -1,6 +1,7 @@
+package tmp;
+
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,7 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.lang.reflect.Field;
+
 public class msg_server extends Thread {
     static ArrayList<Socket> users = new ArrayList<Socket>();
     Socket socket;

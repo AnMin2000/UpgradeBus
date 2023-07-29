@@ -1,6 +1,6 @@
+package tmp;
+
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.nio.charset.Charset;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.lang.reflect.Field;
+
 public class msg_client {
     public static void main(String[] args) {
         try {

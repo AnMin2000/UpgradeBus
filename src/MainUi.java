@@ -1,7 +1,10 @@
+import client.frame.AppFrame;
+
 import java.awt.*;             // 폰트 등 그래픽 처리를 위한 클래스들의 경로명
 import java.awt.event.*;       // 이벤트 처리에 필요한 기본 클래스들의 경로명
 import java.sql.SQLException;
 import javax.swing.*;          // 스윙 컴포넌트 클래스들 경로명
+
 
 
 class Title extends JPanel {
@@ -218,8 +221,13 @@ class CenterPanel extends JPanel {
         });
         chatBot.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                new Customer("dksals");
-                frame.dispose();          // **************************수정***********************************
+                try {
+                    AppFrame frame = new AppFrame();
+                    frame.setVisible(true);
+                }    // **************************수정***********************************
+                catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
     }
